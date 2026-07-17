@@ -1,0 +1,52 @@
+[
+  {
+    "uid": "8d75f68c-fc4a-42ef-9b53-cd61e749c2b0",
+    "status": "unread",
+    "title": "23andMe to pay $18 million in new genetics data breach settlement",
+    "publishedAt": "Thu, 16 Jul 2026 09:47:23 -0400",
+    "author": "Sergiu Gatlan",
+    "category": "Security",
+    "url": "https://www.bleepingcomputer.com/news/security/23andme-to-pay-18-million-in-new-genetics-data-breach-settlement/",
+    "summary": "Genetic testing company 23andMe has agreed to pay $18 million to settle claims from a coalition of 43 attorneys general that it failed to protect customers' genetic data."
+  },
+  {
+    "uid": "31b6af90-487f-49ef-ae30-6af97dd0c829",
+    "status": "read",
+    "title": "Scattered Spider members behind TfL hack get five years in prison",
+    "publishedAt": "Thu, 16 Jul 2026 08:31:29 -0400",
+    "author": "Sergiu Gatlan",
+    "category": "Security",
+    "url": "https://www.bleepingcomputer.com/news/security/scattered-spider-members-behind-transport-for-london-hack-get-five-years-in-prison/",
+    "summary": "Two leading members of the Scattered Spider cybercrime collective were sentenced to five years and six months in prison each for hacking Transport for London (TfL) in 2024."
+  },
+  {
+    "uid": "d98a4f92-6344-4ca0-95bc-1efc9d0e7c88",
+    "status": "read",
+    "title": "Windows 11 24H2 Home and Pro reach end of support in 90 days",
+    "publishedAt": "Thu, 16 Jul 2026 07:59:24 -0400",
+    "author": "Sergiu Gatlan",
+    "category": "Microsoft",
+    "url": "https://www.bleepingcomputer.com/news/microsoft/windows-11-24h2-home-and-pro-reach-end-of-support-in-90-days/",
+    "summary": "Microsoft announced on Wednesday that systems running Windows 10 Enterprise LTSB 2016 and Home and Pro editions of Windows 11 24H2 will stop receiving updates in three months."
+  },
+  {
+    "uid": "f4e2e9fd-0b4f-42a2-bd74-3e61f2dcfc54",
+    "status": "unread",
+    "title": "CISA orders feds to patch actively exploited Oracle flaw by Saturday",
+    "publishedAt": "Thu, 16 Jul 2026 06:56:03 -0400",
+    "author": "Sergiu Gatlan",
+    "category": "Security",
+    "url": "https://www.bleepingcomputer.com/news/security/cisa-orders-feds-to-patch-actively-exploited-oracle-flaw-by-saturday/",
+    "summary": "CISA has ordered federal agencies to secure their systems by Saturday against ongoing attacks exploiting a critical vulnerability in the Oracle E-Business Suite financial application."
+  },
+  {
+    "uid": "e1b677c0-1e49-471f-8edc-a5e6a221a101",
+    "status": "unread",
+    "title": "Microsoft: Some Dell PCs shut down after recent Windows updates",
+    "publishedAt": "Wed, 15 Jul 2026 04:26:48 -0400",
+    "author": "Sergiu Gatlan",
+    "category": "Security",
+    "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-some-dell-devices-shut-down-after-windows-update/",
+    "summary": "Microsoft is blocking this month's Windows 11 security updates on some Dell devices because they are causing shutdowns and performance issues."
+  }
+]
