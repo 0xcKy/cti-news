@@ -12,7 +12,7 @@ def pg_connect(i):
         with psycopg.connect(
             host = os.getenv('HOSTNAME'),
             dbname = os.getenv('DATABASE_NAME'),
-            user = os.getenv('USERNAME'),
+            user = os.getenv('USER_NAME'),
             password = os.getenv('PASSWORD_TEXT'),
             port = os.getenv('PORT_ID')) as conn:
         
@@ -38,7 +38,7 @@ def create_table():
         with psycopg.connect(
             host = os.getenv('HOSTNAME'),
             dbname = os.getenv('DATABASE_NAME'),
-            user = os.getenv('USERNAME'),
+            user = os.getenv('USER_NAME'),
             password = os.getenv('PASSWORD_TEXT'),
             port = os.getenv('PORT_ID')) as conn:
         
