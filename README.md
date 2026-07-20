@@ -1,4 +1,4 @@
-# CTI News Correlation
+# CTI News (WIP)
 
 ## Descrição
 
@@ -8,10 +8,8 @@ As notícias são coletadas de diferentes fontes, armazenadas em banco de dados,
 
 ## Funcionalidades
 
-- Coleta automática de notícias via RSS e outras fontes.
+- Coleta automática de notícias via RSS.
 - Armazenamento das notícias em PostgreSQL.
-- Remoção de notícias duplicadas.
-- Correlação de notícias relacionadas.
 - Extração de informações relevantes, como:
   - CVEs
   - IOCs
