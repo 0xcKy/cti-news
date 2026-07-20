@@ -31,7 +31,7 @@ def list_unread_news():
 
 
 @tool
-def get_information_from_table():
+def get_unread_news():
     """Get news articles from table, provided by database. Summarize all news article given. Return a short summary of the articles separated individually content in plain text"""
     print('Get table information tool called')
     result = get_table_info()
@@ -57,7 +57,7 @@ def summarize_news(uid):
         return raw_llm.invoke(prompt).content
 
 llm = init_chat_model(CHAT_MODEL, model_provider='ollama')
-llm = llm.bind_tools([list_unread_news, summarize_news, get_information_from_table])
+llm = llm.bind_tools([list_unread_news, summarize_news, get_unread_news])
 
 raw_llm = init_chat_model(CHAT_MODEL, model_provider='ollama')
 
@@ -72,7 +72,7 @@ def router(state):
 
 
 
-tool_node = ToolNode([list_unread_news, summarize_news, get_information_from_table])
+tool_node = ToolNode([list_unread_news, summarize_news, get_unread_news])
 
 
 def tools_node(state):

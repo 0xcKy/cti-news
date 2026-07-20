@@ -20,10 +20,11 @@ def get_table_info():
             with conn.cursor() as cur:
                 
                 table = os.getenv('TABLE_NAME')
-                cur.execute(f'SELECT * FROM {table}')
+                cur.execute(f'SELECT * FROM {table} WHERE is_read = false')
                 table_info = cur.fetchall()
                 for i in table_info:
-                    result = result + (f"ID: {str(i[0])}\nSource: {i[1]}\nTitle: {i[2]}\nURL: {i[3]}\nPublished @: {i[4]}\nCollected @: {i[6]}\nContent: {i[5]}\n\n")
+                    result = result + (f"ID: {str(i[0])}\nSource: {i[1]}\nTitle: {i[2]}\nURL: {i[3]}\nPublished @: {i[4]}\nCollected @: {i[6]}\nContent: {i[5]}\nIs read: {i[7]}\n\n")
+            print(result)   
             return(result)
     except Exception as error:
         print(error)
