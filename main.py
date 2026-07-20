@@ -3,11 +3,12 @@
 import feedparser
 import argparse
 from datetime import datetime, date
-from pg import pg_connect
+from pg import pg_connect, create_table
 
 parser = argparse.ArgumentParser() #create parser
 parser.add_argument("-w", "--writehtml", action="store_true", help="write html with downloaded feeds")
 parser.add_argument("-d", "--database", action="store_true", help="write feeds to database")
+parser.add_argument("-t", "--createtable", action="store_true", help="creates table if dont't already exist")
 argument = parser.parse_args()
 
 rss_url = ['https://feedexample.com/feed.xml'] #list with feeds
@@ -45,6 +46,7 @@ def get_rss():
                         "content": entry.description,
                         "collected_at": datetime.now()
                     }
+                    pg_connect(result)
             except:
                 pass
         else:
@@ -62,3 +64,5 @@ if __name__ == '__main__':
         write_rss_html()
     if (argument.database):
         get_rss()
+    if (argument.createtable):
+        create_table()
