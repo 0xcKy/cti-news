@@ -45,8 +45,6 @@ def get_rss():
                         "content": entry.description,
                         "collected_at": datetime.now()
                     }
-                    pg_connect(result)
-                    print("db ok")
             except:
                 pass
         else:

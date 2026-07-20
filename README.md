@@ -1,37 +1,36 @@
-# CTI News Correlation
+# CTI News (WIP)
 
-## Descrição
+## Description
 
-O projeto tem como objetivo automatizar a coleta, processamento, correlação e notificação de notícias relacionadas à Segurança da Informação e Cyber Threat Intelligence (CTI).
+This project aims to automate the collection, processing, correlation, and notification of news related to Information Security and Cyber Threat Intelligence (CTI).
 
-As notícias são coletadas de diferentes fontes, armazenadas em banco de dados, processadas e enriquecidas para identificar conteúdos relevantes aos ativos monitorados pela organização. O sistema também permite a correlação de informações e a geração de alertas por diferentes canais.
+News is collected from multiple sources, stored in a database, processed, and enriched to identify content relevant to the organization's monitored assets. The system also supports information correlation and alert generation through multiple notification channels.
 
-## Funcionalidades
+## Features
 
-- Coleta automática de notícias via RSS e outras fontes.
-- Armazenamento das notícias em PostgreSQL.
-- Remoção de notícias duplicadas.
-- Correlação de notícias relacionadas.
-- Extração de informações relevantes, como:
-  - CVEs
-  - IOCs
-  - Produtos afetados
-  - Fabricantes
-  - Proof of Concept (PoC)
-- Filtragem baseada nos ativos monitorados.
-- Geração de alertas por e-mail e outros canais.
+* Automatic news collection via RSS feeds.
+* News storage in PostgreSQL.
+* Extraction of relevant information, including:
+  * CVEs
+  * IOCs
+  * Affected products
+  * Vendors
+  * Proofs of Concept (PoCs)
+* Filtering based on monitored assets.
+* Alert generation via email and other notification channels.
 
-## Tecnologias
+## Technologies
 
-- Python
-- PostgreSQL
-- Ollama
-- LangChain
+* Python
+* PostgreSQL
+* Ollama
+* LangChain
 
-## Objetivos
+## Objectives
 
-- Automatizar a coleta de inteligência de ameaças.
-- Reduzir o volume de análise manual.
-- Priorizar notícias relevantes.
-- Correlacionar informações provenientes de diferentes fontes.
-- Auxiliar equipes de Segurança da Informação na identificação rápida de ameaças.
+* Automate cyber threat intelligence collection.
+* Reduce the volume of manual analysis.
+* Prioritize relevant news.
+* Correlate information from multiple sources.
+* Help Information Security teams quickly identify emerging threats.
+
