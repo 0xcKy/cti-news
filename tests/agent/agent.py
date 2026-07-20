@@ -1,18 +1,17 @@
 import os
 import json
 from typing import TypedDict
-
 from dotenv import load_dotenv
+from pg_test import get_table_info 
 
 from langchain.chat_models import init_chat_model
 from langchain_core.tools import tool
-
 from langgraph.prebuilt import ToolNode
 from langgraph.graph import StateGraph, START, END
 
 load_dotenv()
 
-CHAT_MODEL = 'llama3.2:latest'
+CHAT_MODEL = 'llama3.2:3b'
 
 
 class ChatState(TypedDict):
@@ -29,6 +28,15 @@ def list_unread_news():
             if i["status"] == "unread":
                 result = result + f"--> {i["title"]} ==== {i["publishedAt"]} \n\n{i["summary"]}\n\nURL: {i["url"]}\nUUID: {i["uid"]}\n\n"
         return result
+
+
+@tool
+def get_information_from_table():
+    """Get news articles from table, provided by database. Summarize all news article given. Return a short summary of the articles separated individually content in plain text"""
+    print('Get table information tool called')
+    result = get_table_info()
+    return raw_llm.invoke(result).content
+
 
 @tool
 def summarize_news(uid):
@@ -49,7 +57,7 @@ def summarize_news(uid):
         return raw_llm.invoke(prompt).content
 
 llm = init_chat_model(CHAT_MODEL, model_provider='ollama')
-llm = llm.bind_tools([list_unread_news, summarize_news])
+llm = llm.bind_tools([list_unread_news, summarize_news, get_information_from_table])
 
 raw_llm = init_chat_model(CHAT_MODEL, model_provider='ollama')
 
@@ -64,7 +72,7 @@ def router(state):
 
 
 
-tool_node = ToolNode([list_unread_news, summarize_news])
+tool_node = ToolNode([list_unread_news, summarize_news, get_information_from_table])
 
 
 def tools_node(state):
