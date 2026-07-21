@@ -2,7 +2,7 @@ import os
 import json
 from typing import TypedDict
 from dotenv import load_dotenv
-from pg_test import get_table_info 
+from pg_test import get_table_news
 
 from langchain.chat_models import init_chat_model
 from langchain_core.tools import tool
