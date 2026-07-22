@@ -2,7 +2,7 @@ import os
 import json
 from typing import TypedDict
 from dotenv import load_dotenv
-from pg_test import get_table_news
+from pg_test import get_table_news, update_table_news
 
 from langchain.chat_models import init_chat_model
 from langchain_core.tools import tool
@@ -18,47 +18,20 @@ class ChatState(TypedDict):
     messages: list
 
 @tool
-def list_unread_news():
-    """Return a bullet list of every UNREAD news Title, URL and UUID"""
-    print('List Unread News Tool Called')
-    result = ""
-    with open('news.json') as f:
-        d = json.load(f)
-        for i in d:
-            if i["status"] == "unread":
-                result = result + f"--> {i["title"]} ==== {i["publishedAt"]} \n\n{i["summary"]}\n\nURL: {i["url"]}\nUUID: {i["uid"]}\n\n"
-        return result
-
+def update_unread_news():
+    """Update news from database, from unread to read. Return only text confirming tool execution."""
+    print('Update Unread News Tool Called')
+    update_table_news()
 
 @tool
 def get_unread_news():
-    """Get news articles from table, provided by database. Summarize all news article given. Return a short summary of the articles separated individually content in plain text"""
-    print('Get table information tool called')
-    result = get_table_info()
+    """Get news articles from table, provided by database. If asked, show information like title, URL, content without change."""
+    print('Get Unread News Tool Called')
+    result = get_table_news()
     return raw_llm.invoke(result).content
 
-
-@tool
-def summarize_news(uid):
-    """Summarize all news article given. Return a short summary of the articles separated individually content in plain text."""
-    print('Summarize Web Article Tool Called')
-
-    with open('news.json') as f:
-        d = json.load(f)
-        prompt = "Summarize this news article concisely:\n\n"
-        for i in d:
-            prompt = prompt + (
-                f"Title: {i["title"]}\n"
-                f"Published At: {i["publishedAt"]}\n"
-                f"Summary: {i["summary"]}\n"
-                f"URL: {i["url"]}\n"
-            )
-
-        return raw_llm.invoke(prompt).content
-
 llm = init_chat_model(CHAT_MODEL, model_provider='ollama')
-llm = llm.bind_tools([list_unread_news, summarize_news, get_unread_news])
-
+llm = llm.bind_tools([update_unread_news, get_unread_news])
 raw_llm = init_chat_model(CHAT_MODEL, model_provider='ollama')
 
 def llm_node(state):
@@ -70,10 +43,7 @@ def router(state):
     last_message = state['messages'][-1]
     return 'tools' if getattr(last_message, 'tool_calls', None) else 'end'
 
-
-
-tool_node = ToolNode([list_unread_news, summarize_news, get_unread_news])
-
+tool_node = ToolNode([update_unread_news, get_unread_news])
 
 def tools_node(state):
     result = tool_node.invoke(state)
@@ -81,8 +51,6 @@ def tools_node(state):
     return {
         'messages': state['messages'] + result['messages']
     }
-
-
 
 builder = StateGraph(ChatState)
 builder.add_node('llm', llm_node)

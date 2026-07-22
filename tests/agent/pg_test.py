@@ -41,15 +41,10 @@ def update_table_news():
             port = os.getenv('PORT_ID')) as conn:
 
             with conn.cursor() as cur:
-
                 table = os.getenv('TABLE_NAME')
-                cur.execute(f'UPDATE {table} SET is_read=True WHERE id=10')
-                cur.fetchall()
+                cur.execute(f'UPDATE {table} SET is_read=True WHERE is_read=False')
     except Exception as error:
         print(error)
     finally:
         if conn is not None:
             conn.close()
-
-if __name__ == '__main__':
-    update_table_info()
