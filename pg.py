@@ -23,7 +23,7 @@ def download_table_news(i):
                 insert_value = ((i["source"]), (i["title"]), (i["url"]), (i["published"]), (i["content"]), (i["collected_at"]))
                 cur.execute(insert_script, insert_value)
                 cur.execute(f'SELECT * FROM {table}')
-                print(cur.fetchall())
+                cur.fetchall()
 
     except Exception as error:
         print(error)

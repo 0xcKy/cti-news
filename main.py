@@ -3,6 +3,7 @@ import json
 from typing import TypedDict
 from dotenv import load_dotenv
 from pg import get_table_news, update_table_news, download_table_news
+from feed import get_rss
 
 from langchain.chat_models import init_chat_model
 from langchain_core.tools import tool
@@ -17,21 +18,27 @@ CHAT_MODEL = 'llama3.2:3b'
 class ChatState(TypedDict):
     messages: list
 
-@tool
+@tool("update_article_state"), description="Mark news articles from unread to read. Use this when prompted to update and/or mark news articles from unread to read."
 def update_unread_news():
-    """Update news from database, from unread to read. Return only text confirming tool execution."""
+    """Update news from database, from unread to read."""
     print('Update Unread News Tool Called')
     update_table_news()
 
-@tool
+@tool("list_unread_news"), description="Query for unread news. Use this tool when prompted to show and/or list unread news articles."
 def get_unread_news():
-    """Get unread news articles. If asked, show information like title, URL, content without change."""
+    """Get unread news articles."""
     print('Get Unread News Tool Called')
     result = get_table_news()
     return raw_llm.invoke(result).content
 
+@tool("download_rss_feeds"), description="Download new articles from RSS feeds. Use this when prompted to download and/or update news articles"
+def download_rss_feeds():
+    """Download RSS feed news articles."""
+    print('Download RSS feed tool called')
+    get_rss()
+
 llm = init_chat_model(CHAT_MODEL, model_provider='ollama')
-llm = llm.bind_tools([update_unread_news, get_unread_news])
+llm = llm.bind_tools([update_unread_news, get_unread_news, download_rss_feeds])
 raw_llm = init_chat_model(CHAT_MODEL, model_provider='ollama')
 
 def llm_node(state):
@@ -56,7 +63,7 @@ def router(state):
     last_message = state['messages'][-1]
     return 'tools' if getattr(last_message, 'tool_calls', None) else 'end'
 
-tool_node = ToolNode([update_unread_news, get_unread_news])
+tool_node = ToolNode([update_unread_news, get_unread_news, download_rss_feeds])
 
 def tools_node(state):
     result = tool_node.invoke(state)
