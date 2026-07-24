@@ -7,7 +7,7 @@ load_dotenv()
 cur = None
 conn = None
 
-def pg_connect(i):
+def download_table_news(i):
     try:
         with psycopg.connect(
             host = os.getenv('HOSTNAME'),
@@ -61,3 +61,46 @@ def create_table():
     finally:
         if conn is not None:
             conn.close()
+
+def get_table_news():
+    result = ""
+    try:
+        with psycopg.connect(
+            host = os.getenv('HOSTNAME'),
+            dbname = os.getenv('DATABASE_NAME'),
+            user = os.getenv('USER_NAME'),
+            password = os.getenv('PASSWORD_TEXT'),
+            port = os.getenv('PORT_ID')) as conn:
+        
+            with conn.cursor() as cur:
+                
+                table = os.getenv('TABLE_NAME')
+                cur.execute(f'SELECT * FROM {table} WHERE is_read = false')
+                table_info = cur.fetchall()
+                for i in table_info:
+                    result = result + (f"#News\n\n##Title: {i[2]}\nID: {str(i[0])}\nSource: {i[1]}\nURL: {i[3]}\nPublished: {i[4]}\nCollected: {i[6]}\nContent: {i[5]}\nIs read: {i[7]}\n\n")
+            return(result)
+    except Exception as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+
+def update_table_news():
+    try:
+        with psycopg.connect(
+            host = os.getenv('HOSTNAME'),
+            dbname = os.getenv('DATABASE_NAME'),
+            user = os.getenv('USER_NAME'),
+            password = os.getenv('PASSWORD_TEXT'),
+            port = os.getenv('PORT_ID')) as conn:
+
+            with conn.cursor() as cur:
+                table = os.getenv('TABLE_NAME')
+                cur.execute(f'UPDATE {table} SET is_read=True WHERE is_read=False')
+    except Exception as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+

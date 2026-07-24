@@ -25,7 +25,7 @@ def update_unread_news():
 
 @tool
 def get_unread_news():
-    """Get news articles from table, provided by database. If asked, show information like title, URL, content without change."""
+    """Get unread news articles. If asked, show information like title, URL, content without change."""
     print('Get Unread News Tool Called')
     result = get_table_news()
     return raw_llm.invoke(result).content
@@ -34,10 +34,26 @@ llm = init_chat_model(CHAT_MODEL, model_provider='ollama')
 llm = llm.bind_tools([update_unread_news, get_unread_news])
 raw_llm = init_chat_model(CHAT_MODEL, model_provider='ollama')
 
+#def llm_node(state):
+#    response = llm.invoke(state['messages'])
+#    return {'messages': state['messages'] + [response]}
 def llm_node(state):
-    response = llm.invoke(state['messages'])
-    return {'messages': state['messages'] + [response]}
+    response = None
 
+    for chunk in llm.stream(state["messages"]):
+        if response is None:
+            response = chunk
+        else:
+            response += chunk
+
+        if chunk.content:
+            print(chunk.content, end="", flush=True)
+
+    print()
+
+    return {
+        "messages": state["messages"] + [response]
+    }
 
 def router(state):
     last_message = state['messages'][-1]
@@ -65,10 +81,10 @@ graph = builder.compile()
 if __name__ == '__main__':
     state = {'messages': []}
 
-    print('Type an instruction or "quit".\n')
+    print('Type an instruction or "quit".')
 
     while True:
-        user_message = input('> ')
+        user_message = input('\n> ')
 
         if user_message.lower() == 'quit':
             break
@@ -77,4 +93,4 @@ if __name__ == '__main__':
 
         state = graph.invoke(state)
 
-        print(state['messages'][-1].content, '\n')
+        #print(state['messages'][-1].content, '\n')
