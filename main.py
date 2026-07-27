@@ -31,18 +31,16 @@ def get_unread_news():
     result = get_table_news()
     return raw_llm.invoke(result).content
 
-@tool("download_rss_feeds", description="Download new articles from RSS feeds. Use this when prompted to download and/or update news articles")
+@tool("download_rss_feeds", description="Download new articles from RSS feeds. Use this when prompted to download and/or update news articles", return_direct = True)
 def download_rss_feeds():
     """Download RSS feed news articles."""
     print('Download RSS feed tool called')
     get_rss()
 
-@tool("write_rss_report", description="Write a HTML report based on downloaded RSS feeds. Use this tool when prompted to write or create a report from RSS feeds and/or news articles")
+@tool("write_rss_report", description="Write a HTML report based on downloaded RSS feeds. Use this tool when prompted to write or create a report from RSS feeds and/or news articles", return_direct = True)
 def write_rss_report():
     """Write reports in HTML format using RSS feeds and/or news articles"""
-    print('Write report tool called')
     write_rss_html()
-    return("RSS feed report created.")
 
 llm = init_chat_model(CHAT_MODEL, model_provider='ollama', temperature=0)
 llm = llm.bind_tools([update_unread_news, get_unread_news, download_rss_feeds, write_rss_report])
@@ -67,7 +65,20 @@ def llm_node(state):
 
 def router(state):
     last_message = state['messages'][-1]
-    return 'tools' if getattr(last_message, 'tool_calls', None) else 'end'
+    if getattr(last_message, 'tool_calls', None):
+        return 'tools' 
+    else:
+        return 'end'
+    
+
+def router_end(state):
+    last_message = state['messages'][-1]
+    if getattr(last_message, 'tool_calls', None) == 'write_rss_report':
+        return 'end' 
+    elif getattr(last_message, 'tool_calls', None):
+        return 'tools' 
+    else:
+        return 'end'
 
 tool_node = ToolNode([update_unread_news, get_unread_news, download_rss_feeds, write_rss_report])
 
@@ -83,6 +94,7 @@ builder.add_node('llm', llm_node)
 builder.add_node('tools', tools_node)
 builder.add_edge(START, 'llm')
 builder.add_edge('tools', 'llm')
+#builder.add_conditional_edges('tools', router_end, {'llm': 'llm', 'end': END})
 builder.add_conditional_edges('llm', router, {'tools': 'tools', 'end': END})
 
 graph = builder.compile()
@@ -103,4 +115,4 @@ if __name__ == '__main__':
 
         state = graph.invoke(state)
 
-        #print(state['messages'][-1].content, '\n')
+        print(state)
