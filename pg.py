@@ -26,7 +26,8 @@ def download_table_news(i):
                 cur.fetchall()
 
     except Exception as error:
-        print(error)
+        #print(error)
+        pass
     finally:
         if conn is not None:
             conn.close()

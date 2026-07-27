@@ -11,8 +11,7 @@ parser.add_argument("-d", "--database", action="store_true", help="write feeds t
 parser.add_argument("-t", "--createtable", action="store_true", help="creates table if dont't already exist")
 argument = parser.parse_args()
 
-#rss_url = ['https://feedexample.com/feed.xml'] #list with feeds
-rss_url = ['https://www.bleepingcomputer.com/feed/'] #list with feeds
+rss_url = ['https://feedexample.com/feed.xml'] #list with feeds
 filename = "intel_report.html"
 
 def write_rss_html():
