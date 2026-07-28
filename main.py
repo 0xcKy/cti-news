@@ -41,6 +41,7 @@ def download_rss_feeds():
 def write_rss_report():
     """Write reports in HTML format using RSS feeds and/or news articles"""
     write_rss_html()
+    print("Report generated from RSS feeds!")
 
 llm = init_chat_model(CHAT_MODEL, model_provider='ollama', temperature=0)
 llm = llm.bind_tools([update_unread_news, get_unread_news, download_rss_feeds, write_rss_report])
@@ -73,12 +74,10 @@ def router(state):
 
 def router_end(state):
     last_message = state['messages'][-1]
-    if getattr(last_message, 'tool_calls', None) == 'write_rss_report':
+    if getattr(last_message, 'name', None) in ['write_rss_report','download_rss_feeds']:
         return 'end' 
-    elif getattr(last_message, 'tool_calls', None):
-        return 'tools' 
     else:
-        return 'end'
+        return 'llm'
 
 tool_node = ToolNode([update_unread_news, get_unread_news, download_rss_feeds, write_rss_report])
 
@@ -93,8 +92,8 @@ builder = StateGraph(ChatState)
 builder.add_node('llm', llm_node)
 builder.add_node('tools', tools_node)
 builder.add_edge(START, 'llm')
-builder.add_edge('tools', 'llm')
-#builder.add_conditional_edges('tools', router_end, {'llm': 'llm', 'end': END})
+#builder.add_edge('tools', 'llm')
+builder.add_conditional_edges('tools', router_end, {'llm': 'llm', 'end': END})
 builder.add_conditional_edges('llm', router, {'tools': 'tools', 'end': END})
 
 graph = builder.compile()
@@ -114,5 +113,3 @@ if __name__ == '__main__':
         state['messages'].append({'role': 'user', 'content': user_message})
 
         state = graph.invoke(state)
-
-        print(state)

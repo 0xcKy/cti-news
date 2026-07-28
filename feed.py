@@ -56,7 +56,6 @@ def get_rss():
 def write_file(i):
     with open(str(filename), 'w+') as f:
         f.write('%s\n' %i)
-        print("File written successfully")
         f.close()
 
 if __name__ == '__main__':
