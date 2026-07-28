@@ -8,10 +8,11 @@ from pg import download_table_news, create_table
 parser = argparse.ArgumentParser() #create parser
 parser.add_argument("-w", "--writehtml", action="store_true", help="write html with downloaded feeds")
 parser.add_argument("-d", "--database", action="store_true", help="write feeds to database")
-parser.add_argument("-t", "--createtable", action="store_true", help="creates table if dont't already exist")
+parser.add_argument("-c", "--createtable", action="store_true", help="creates table if dont't already exist")
 argument = parser.parse_args()
 
-rss_url = ['https://feedexample.com/feed.xml'] #list with feeds
+#rss_url = ['https://feedexample.com/feed.xml'] #list with feeds
+rss_url = ['https://www.bleepingcomputer.com/feed/','https://feeds.feedburner.com/TheHackersNews', 'https://www.securityweek.com/feed/'] #list with feeds
 filename = "intel_report.html"
 
 def write_rss_html():

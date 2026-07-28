@@ -2,6 +2,7 @@ import os
 import json
 from typing import TypedDict
 from dotenv import load_dotenv
+
 from pg import get_table_news, update_table_news, download_table_news
 from feed import get_rss, write_rss_html
 
@@ -14,10 +15,10 @@ load_dotenv()
 
 CHAT_MODEL = 'llama3.2:3b'
 
-
 class ChatState(TypedDict):
     messages: list
 
+#list of tools
 @tool("update_article_state", description="Mark news articles from unread to read. Use this when prompted to update and/or mark news articles from unread to read.")
 def update_unread_news():
     """
@@ -94,7 +95,8 @@ def download_rss_feeds():
 
 @tool("write_rss_report", description="Write a HTML report based on downloaded RSS feeds. Use this tool when prompted to write or create a report from RSS feeds and/or news articles")
 def write_rss_report():
-        """
+
+    """
     Purpose:
         Generate an HTML report containing cybersecurity news from the RSS feed knowledge base.
 
@@ -112,6 +114,7 @@ def write_rss_report():
     write_rss_html()
     print("Report generated from RSS feeds!")
 
+#create models
 llm = init_chat_model(CHAT_MODEL, model_provider='ollama', temperature=0)
 llm = llm.bind_tools([update_unread_news, get_unread_news, download_rss_feeds, write_rss_report])
 raw_llm = init_chat_model(CHAT_MODEL, model_provider='ollama', temperature=0)
@@ -140,7 +143,6 @@ def router(state):
         return 'tools' 
     else:
         return 'end'
-    
 
 def router_end(state):
     last_message = state['messages'][-1]
@@ -149,8 +151,6 @@ def router_end(state):
     else:
         return 'llm'
 
-tool_node = ToolNode([update_unread_news, get_unread_news, download_rss_feeds, write_rss_report])
-
 def tools_node(state):
     result = tool_node.invoke(state)
 
@@ -158,14 +158,14 @@ def tools_node(state):
         'messages': state['messages'] + result['messages']
     }
 
+tool_node = ToolNode([update_unread_news, get_unread_news, download_rss_feeds, write_rss_report])
+
 builder = StateGraph(ChatState)
 builder.add_node('llm', llm_node)
 builder.add_node('tools', tools_node)
 builder.add_edge(START, 'llm')
-#builder.add_edge('tools', 'llm')
 builder.add_conditional_edges('tools', router_end, {'llm': 'llm', 'end': END})
 builder.add_conditional_edges('llm', router, {'tools': 'tools', 'end': END})
-
 graph = builder.compile()
 
 

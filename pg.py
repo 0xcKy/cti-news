@@ -79,7 +79,7 @@ def get_table_news():
                 cur.execute(f'SELECT * FROM {table} WHERE is_read = false')
                 table_info = cur.fetchall()
                 for i in table_info:
-                    result = result + (f"#News\n\n##Title: {i[2]}\nID: {str(i[0])}\nSource: {i[1]}\nURL: {i[3]}\nPublished: {i[4]}\nCollected: {i[6]}\nContent: {i[5]}\nIs read: {i[7]}\n\n")
+                    result = result + (f"##Title: {i[2]}\nID: {str(i[0])}\nSource: {i[1]}\nURL: {i[3]}\nPublished: {i[4]}\nCollected: {i[6]}\nContent: {i[5]}\nIs read: {i[7]}\n\n")
             return(result)
     except Exception as error:
         print(error)
