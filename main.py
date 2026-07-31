@@ -151,6 +151,8 @@ def router_end(state):
     else:
         return 'llm'
 
+tool_node = ToolNode([update_unread_news, get_unread_news, download_rss_feeds, write_rss_report])
+
 def tools_node(state):
     result = tool_node.invoke(state)
 
@@ -158,7 +160,6 @@ def tools_node(state):
         'messages': state['messages'] + result['messages']
     }
 
-tool_node = ToolNode([update_unread_news, get_unread_news, download_rss_feeds, write_rss_report])
 
 builder = StateGraph(ChatState)
 builder.add_node('llm', llm_node)
